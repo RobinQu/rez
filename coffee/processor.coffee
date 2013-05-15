@@ -21,11 +21,13 @@ class Processor
   identify: (fp, cb) ->
     im.identify fp, cb
   
-  handle: (options, fp, cb) ->
+  handle: (data, cb) ->
+    options = data.parameters
     mode = options.mode or "crop"
-    dest = "#{fp}_processed"
+    dest = data.dest
+    fp = data.fp
     quality = options.quality or 0.8
-
+    # console.log fp
     @identify fp, (e, features) ->
       if e
         console.error "unable to recongnize source image file"
@@ -36,7 +38,6 @@ class Processor
             cb e
           else
             cb null, dest: dest, identity: features
-            
         switch mode
           when "resize"
             # resize mode
@@ -52,7 +53,10 @@ class Processor
               cb new Error "missing parameter width or height"
           when "crop"
             # crop mode
-            [w, h] = options.resize.toLowerCase().split "x"
+            [w, h] = options.resize.toLowerCase().split "x" if options.resize
+            w = options.width if options.width
+            h = options.width if options.width
+              
             if w and h
               im.crop 
                 srcPath: fp
@@ -60,7 +64,7 @@ class Processor
                 width: w
                 height: h
                 quality: quality
-                gravity: GravityMaps [options.graivity or "n"]
+                gravity: GravityMaps[options.graivity or "n"]
               , callback
             else
               cb new Error "missing parameter `resize`"

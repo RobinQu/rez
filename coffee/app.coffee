@@ -31,35 +31,44 @@ class App
   
   handle: (req, res) ->
     source = req.query.source
-    fp = path.resolve __dirname, "../tmp/" + microtime.now()
-    remote = request(source)
-    console.log fp
-    remote.pipe(fs.createWriteStream(fp));
-    setTimeout () ->
+    extname = path.extname source
+    salt = microtime.now()
+    fp = path.resolve __dirname, "../tmp/#{salt}#{extname}"
+    dest = path.resolve __dirname, "../tmp/#{salt}_processed#{extname}"
+    timer = setTimeout () ->
       res.error new Error("Operation timeout")
-    , 10*1000
+    , 20*1000
     cleanup = () ->
+      console.log "cleanup..."
       if fs.existsSync fp
         fs.unlinkSync fp
-      if fs.existsSync "#{fp}_processed"
-        fs.unlinkSync "#{fp}_processed"
-    remote.on "error", (e) =>
+      if fs.existsSync dest
+        fs.unlinkSync dest
+      
+    remote = request(source)
+    remote.pipe fs.createWriteStream(fp)
+    remote.on "error", (e) ->
+      clearTimeout timer
+      cleanup
       res.error e
     remote.on "end", () =>
       console.log "About to process localized file for #{source}"
-      @processor.handle req.query, fp, (e, result) =>
+      @processor.handle parameters: req.query, fp:fp, dest:dest , (e, result) =>
+        clearTimeout timer
         if e
           res.error e
-          cleanup
+          cleanup()
         else
           console.log "Process done for #{source}"
-          res.writeHead 200, "Content-Type": mime.lookup result.identity.format
+          res.writeHead 200, 
+            "Content-Type": mime.lookup result.identity.format
+            "X-Original-Width": result.identity.width
+            "X-Original-Height": result.identity.height
+            
           output = fs.createReadStream(result.dest)
-          output.pip(res)
+          output.pipe(res)
           output.on "end", cleanup
-    
-    
-  
+      
   @bootstrap: (port=process.env.PORT) ->
     app = (new App(port)).start()
   
