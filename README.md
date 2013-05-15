@@ -1,18 +1,17 @@
-Rez
-===
+#Rez
+
 
 **Image Manipluation as Service**
 
-Rez is a out-of-box online service for image image manipulation. Built on node stacks, it is ideal for handling image operation IO.
+Rez is a out-of-box online service for image image manipulation. Built on node stacks, it is ideal for handling image operation IOs.
 
 
-API
-===
+##API
+
 
 Please send GET requests to API with querystring. Available options for querystring:
 
-Common Option
--------------
+###Common Option
 
   * **mode**(String)
 
@@ -27,8 +26,7 @@ Common Option
     Quality of transfomred image
 
 
-Ratio Mode
-----------
+###Ratio Mode
 
 Resize source image by ratio
 
@@ -37,8 +35,7 @@ Options:
   * **ratio**(Number), should be less than 1
   
 
-Resize Mode
------------
+###Resize Mode
 
 Resize source image by width or height
 
@@ -49,8 +46,7 @@ Options:
   * **height**: resize by height
 
 
-Crop Mode
----------
+###Crop Mode
 
 Crop image by given size
 
@@ -60,8 +56,7 @@ Options:
   * **height** Height of desired crop
 
 
-Heroku
-======
+##Heroku
 
 Procfile is included, and by default it starts with clustering:
 
