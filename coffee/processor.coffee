@@ -39,6 +39,15 @@ class Processor
           else
             cb null, dest: dest, identity: features
         switch mode
+          when "ratio"
+            ratio = options.ratio
+            im.resize 
+              srcPath: fp
+              dstPath: dest
+              quality: quality
+              width: Math.ceil(features.width * ratio)
+              height: Math.ceil(features.height * ratio)
+            , callback
           when "resize"
             # resize mode
             if options.width or options.height

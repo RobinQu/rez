@@ -6,6 +6,7 @@ path = require "path"
 mime = require "mime"
 Processor = require "./processor"
 url = require "url"
+cluster = require "cluster"
 
 class App
 
@@ -25,7 +26,8 @@ class App
     )
   
   start: (fn) ->
-    console.log "Rez is up and running at #{@port}"
+    if not cluster.isWorker 
+      console.log "Rez is up and running at #{@port}"
     @srv.listen(@port, fn)
     @
   
