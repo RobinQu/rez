@@ -38,9 +38,13 @@ class Processor
             cb e
           else
             cb null, dest: dest, identity: features
+        nothing = () ->
+          cb null, dest:fp, identity: feature
+
         switch mode
           when "ratio"
             ratio = options.ratio
+            return nothing() if !ratio
             im.resize 
               srcPath: fp
               dstPath: dest
@@ -59,9 +63,10 @@ class Processor
                 height: options.height or 0
               , callback
             else
-              cb new Error "missing parameter width or height"
+              nothing()
           when "crop"
             # crop mode
+            return nothing() if !options.resize
             [w, h] = options.resize.toLowerCase().split "x" if options.resize
             w = options.width if options.width
             h = options.width if options.width

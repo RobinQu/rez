@@ -9,7 +9,7 @@ Rez is a out-of-box online service for image image manipulation. Built on node s
 ##API
 
 
-Please send GET requests to API with querystring. Available options for querystring:
+Please send `GET` requests to API with querystring. Available options for querystring:
 
 ###Common Option
 
@@ -19,7 +19,7 @@ Please send GET requests to API with querystring. Available options for querystr
   
   * **source**(String)
 
-    URI for source image file image. For the proper `content-type` of the API response, you should garantee either the resource pointed by this URI has correct `contet-type` header or it ends with proper extention names like `png`, `jpg`
+    URI for source image file image. For the proper `content-type` of the API response, you should garantee either the resource pointed by this URI has correct `contet-type` header or it ends with a proper extention name like `png`, `jpg`
     
   * **quality**(Number)
 
@@ -41,9 +41,17 @@ Resize source image by width or height
 
 Options: 
 
-  * **resize**(String): resize command like "500x100", "400x300"
-  * **width**(Number): resize by width
-  * **height**: resize by height
+  * **resize**(String)
+  
+  	resize command like "500x100", "400x300"
+  	
+  * **width**(Number)
+  	
+  	resize by width
+  	
+  * **height**(Number)
+
+	resize by height
 
 
 ###Crop Mode
@@ -52,9 +60,28 @@ Crop image by given size
 
 Options:
   
-  * **width** Width of desired crop
-  * **height** Height of desired crop
-
+  * **width** 
+  
+  	Width of desired crop
+  	
+  * **height** 
+  	
+  	Height of desired crop
+  	
+  * **gravity**
+  
+  	Cropping policy that determines which part of original images should remain.
+  Possible values: 
+  
+	* n : North
+    * s: South
+    * w: West
+    * e: East
+    * nw: NorthWest
+    * ne: NorthEast
+    * sw: SouthWest
+    * se: SouthEast
+    * c: Center
 
 ##Heroku
 

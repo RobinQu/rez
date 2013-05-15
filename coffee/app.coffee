@@ -35,6 +35,9 @@ class App
     source = req.query.source
     extname = path.extname source
     salt = microtime.now()
+    if !source or !req.query.mode
+      res.error new Error("missing parameters")
+      return
     fp = path.resolve __dirname, "../tmp/#{salt}#{extname}"
     dest = path.resolve __dirname, "../tmp/#{salt}_processed#{extname}"
     timer = setTimeout () ->
